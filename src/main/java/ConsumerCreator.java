@@ -16,7 +16,7 @@ public class ConsumerCreator {
 
     public static Consumer<Long, String> createConsumer() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", "192.168.1.16:9092");
         props.put("group.id", "consumerGroup10");
         props.put("key.deserializer", LongDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());

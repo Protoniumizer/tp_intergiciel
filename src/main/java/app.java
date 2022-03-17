@@ -45,20 +45,18 @@ public class app {
     }
 
     static void runProducer() {
-        Producer<Long, String> producer = ProducerCreator.createProducer();
+        Producer<Long, String> producer1 = ProducerCreator.createProducer();
 
         for(int index = 0; index < IKafkaConstants.MESSAGE_COUNT; ++index) {
-            ProducerRecord record = new ProducerRecord("HT-topic", "Enregistrement N° " + index);
-
+            ProducerRecord record = new ProducerRecord("Topic1", "Enregistrement N° " + index);
             try {
-                RecordMetadata metadata = (RecordMetadata)producer.send(record).get();
-                System.out.println("Enregistrement envoyer avec clè " + index + " vers la partition " + metadata.partition() + " Et l'offset " + metadata.offset());
-            } catch (ExecutionException var4) {
+                //producer1.send(record);
+                //System.out.println("envoi ok");
+                RecordMetadata metadata = (RecordMetadata)producer1.send(record).get();
+                System.out.println("Enregistrement envoyé avec clé " + index + " vers la partition " + metadata.partition() + " Et l'offset " + metadata.offset());
+            } catch (Exception e) {
                 System.out.println("Erreur dans l'envoi de l'enregistrement");
-                System.out.println(var4);
-            } catch (InterruptedException var5) {
-                System.out.println("Erreur dans l'envoi de l'enregistrement");
-                System.out.println(var5);
+                System.out.println(e);
             }
         }
 
