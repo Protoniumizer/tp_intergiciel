@@ -15,8 +15,7 @@ public class ProducerCreator {
 
     public static Producer<Long, String> createProducer() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
-        //props.put("client.id", "client1");
+        props.put("bootstrap.servers", IKafkaConstants.KAFKA_BROKERS);
         props.put("key.serializer", LongSerializer.class.getName());
         props.put("value.serializer", StringSerializer.class.getName());
         return new KafkaProducer(props);

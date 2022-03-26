@@ -16,7 +16,7 @@ public class ConsumerCreator {
 
     public static Consumer<Long, String> createConsumer() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "192.168.1.16:9092");
+        props.put("bootstrap.servers", IKafkaConstants.KAFKA_BROKERS);
         props.put("group.id", "consumerGroup10");
         props.put("key.deserializer", LongDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
@@ -24,7 +24,21 @@ public class ConsumerCreator {
         props.put("enable.auto.commit", "false");
         props.put("auto.offset.reset", "earliest");
         Consumer<Long, String> consumer = new KafkaConsumer(props);
-        consumer.subscribe(Collections.singletonList("HT-topic"));
+        consumer.subscribe(Collections.singletonList("Topic1"));
+        return consumer;
+    }
+
+    public static Consumer<Long, String> createConsumer(String topic) {
+        Properties props = new Properties();
+        props.put("bootstrap.servers", IKafkaConstants.KAFKA_BROKERS);
+        props.put("group.id", "consumerGroup10");
+        props.put("key.deserializer", LongDeserializer.class.getName());
+        props.put("value.deserializer", StringDeserializer.class.getName());
+        props.put("max.poll.records", IKafkaConstants.MAX_POLL_RECORDS);
+        props.put("enable.auto.commit", "false");
+        props.put("auto.offset.reset", "earliest");
+        Consumer<Long, String> consumer = new KafkaConsumer(props);
+        consumer.subscribe(Collections.singletonList(topic));
         return consumer;
     }
 }
