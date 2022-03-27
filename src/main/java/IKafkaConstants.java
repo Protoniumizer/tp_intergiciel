@@ -4,7 +4,7 @@
 //
 
 public interface IKafkaConstants {
-    String KAFKA_BROKERS = "192.168.1.16:9092";
+    String KAFKA_BROKERS = "localhost:9092";
     Integer MESSAGE_COUNT = 200;
     String CLIENT_ID = "client1";
     String TOPIC_NAME = "Topic1";

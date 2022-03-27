@@ -9,6 +9,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 import com.jayway.jsonpath.DocumentContext;
@@ -22,13 +23,11 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.postgresql.util.PGobject;
 
 public class app {
-    private static String url = "jdbc:postgresql://localhost/postgres?currentSchema=covid19";
-    private static String user = "Covid19";
-    private static String password = "Covid19";
     public app() {
     }
 
     public static void main(String[] args) {
+
         Producer<Long, String> producer1 = ProducerCreator.createProducer();
         Producer<Long, String> producer2 = ProducerCreator.createProducer();
         Producer<Long, String> producer3 = ProducerCreator.createProducer();
@@ -36,12 +35,86 @@ public class app {
         Consumer<Long, String> consumer2 = ConsumerCreator.createConsumer("Topic2");
         Consumer<Long, String> consumer3 = ConsumerCreator.createConsumer("Topic3");
 
+        Scanner scanner = new Scanner(System.in);
+
+
+        System.out.println("Bienvenue dans le programme de requêtage de données Covid19.");
+        System.out.println("Saisissez une commande à exécuter (faites \"Help\" pour connaître les commandes possibles) :");
+
+        String saisie = scanner.next();
+        boolean commandRecognized = false;
+        while(true){
+        while(!commandRecognized){
+            switch (saisie){
+
+                case "Get_global_values":
+                    System.out.println("Get_global_values");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Get_country_values":
+                    System.out.println("Get_country_values");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Get_confirmed_avg":
+                    System.out.println("Get_confirmed_avg");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Get_deaths_avg":
+                    System.out.println("Get_deaths_avg");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Get_countries_deaths_percent":
+                    System.out.println("Get_countries_deaths_percent");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Export":
+                    System.out.println("Export");
+                    commandRecognized = true;
+                    producerSend(producer2, "Topic2", saisie);
+                    break;
+
+                case "Quit":
+                    System.out.println("Quit");
+                    commandRecognized = true;
+                    System.out.println("Merci d'avoir utilisé notre service.");
+                    System.out.println("Bonne journée !");
+                    System.exit(0);
+                    break;
+
+                case "Help":
+                    System.out.println("Help");
+                    commandRecognized = false;
+                    System.out.println("Get_global_values permet de ....");
+                    System.out.println("Get_country_values permet de ....");
+                    System.out.println("Saisissez une commande à exécuter :");
+                    saisie = scanner.next();
+                    break;
+
+                default:
+                    System.out.println("Commande inconnue.");
+                    System.out.println("Saisissez une commande à exécuter (faites \"Help\" pour connaître les commandes possibles) :");
+                    saisie = scanner.next();
+            }
+        }}
+        /*
         producerSend(producer1, "Topic1", getApiDatas());
         System.out.println("----------------------------");
         System.out.println("----------------------------");
         System.out.println("----------------------------");
         System.out.println("----------------------------");
         runConsumer(consumer1);
+
+         */
     }
 
     public static Connection connect() throws SQLException {
@@ -50,7 +123,7 @@ public class app {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection(url, user, password);
+        return DriverManager.getConnection(IPostGresConstants.URL, IPostGresConstants.USER, IPostGresConstants.PASSWORD);
     }
 
     public static long insertGlobal(String json) {
@@ -100,7 +173,6 @@ public class app {
                     System.out.println("Record value " + record.value().toString());
                     insertGlobal(record.value().toString());
 
-
                     /*
                     String json = record.value().toString();
                     System.out.println(JsonPath.read(json, "$.Countries[*]").toString());
@@ -117,7 +189,6 @@ public class app {
                 consumer.commitAsync();
             }
         } while (noMessageToFetch <= IKafkaConstants.MAX_NO_MESSAGE_FOUND_COUNT);
-
         consumer.close();
     }
 
@@ -133,7 +204,6 @@ public class app {
     }
 
     public static String getApiDatas() {
-        System.out.println("Coucou petite perruche");
         try {
             URL url = new URL(IApiConstants.API_ADDRESS);//your url i.e fetch data from .
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -152,9 +222,6 @@ public class app {
                 output+=json;
             }
             return output;
-
-
-
         } catch (Exception e) {
             System.out.println("Exception in NetClientGet:- " + e);
             return null;
