@@ -24,7 +24,6 @@ public class Pr2Cs3 {
 
             switch (saisie){
                 case "Get_global_values":
-                    System.out.println("Get_global_values");
                     commandRecognized = true;
                     send(producer, "Topic2", saisie);
                     printOutput(consumer);
@@ -32,7 +31,6 @@ public class Pr2Cs3 {
 
                 case "Get_country_values":
                     if(scanner.hasNext()){
-                        System.out.println("Get_country_values");
                         commandRecognized = true;
                         send(producer, "Topic2", saisie+" "+scanner.next());
                         printOutput(consumer);
@@ -44,35 +42,30 @@ public class Pr2Cs3 {
                     break;
 
                 case "Get_confirmed_avg":
-                    System.out.println("Get_confirmed_avg");
                     commandRecognized = true;
                     send(producer, "Topic2", saisie);
                     printOutput(consumer);
                     break;
 
                 case "Get_deaths_avg":
-                    System.out.println("Get_deaths_avg");
                     commandRecognized = true;
                     send(producer, "Topic2", saisie);
                     printOutput(consumer);
                     break;
 
                 case "Get_countries_deaths_percent":
-                    System.out.println("Get_countries_deaths_percent");
                     commandRecognized = true;
                     send(producer, "Topic2", saisie);
                     printOutput(consumer);
                     break;
 
                 case "Export":
-                    System.out.println("Export");
                     commandRecognized = true;
                     send(producer, "Topic2", saisie);
                     printOutput(consumer);
                     break;
 
                 case "Quit":
-                    System.out.println("Quit");
                     commandRecognized = true;
                     System.out.println("Merci d'avoir utilisé notre service.");
                     System.out.println("Bonne journée !");
@@ -80,11 +73,13 @@ public class Pr2Cs3 {
                     break;
 
                 case "Help":
-                    System.out.println("Help");
                     commandRecognized = false;
                     System.out.println("Get_global_values permet de retourner les valeurs globales du covid");
-                    System.out.println("Get_country_values v_pays permet de retourner les valeurs du pays demandé ou v_pays est une chaine de caractère du pays demandé");
+                    System.out.println("Get_country_values v_pays permet de retourner les valeurs du pays demandé ou v_pays est le code pays du pays demandé (ex : France = FR)");
                     System.out.println("Get_confirmed_avg permet de retourner une moyenne des cas confirmés sum(pays)/nb(pays))");
+                    System.out.println("Get_deaths_avg permet de retourner une moyenne des Décès sum(pays)/nb(pays))");
+                    System.out.println("Get_countries_deaths_percent permet de retourner le pourcentage de Décès par rapport aux cas confirmés)");
+                    System.out.println("Export permet d’exporter les données de la base de données en XML dans un fichier");
                     break;
 
                 default:
