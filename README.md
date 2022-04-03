@@ -5,21 +5,50 @@ FOSSEY Mathis
 WATIER Julie
 
 
-## CREATE TOPIC
+## LAUNCH SERVER KAFKA/ZOOKEEPER
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
+On WINDOWS
 ```bash
-pip install foobar
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+.\bin\windows\kafka-server-start.bat .\config\server.properties 
+```
+On LINUX 
+```bash
+.\bin\zookeeper-server-start.sh .\config\zookeeper.properties
+.\bin\kafka-server-start.sh .\config\server.properties 
 ```
 
-## CREATE DATABASE
+## CREATE TOPIC
+On WINDOWS
 
+```bash
+.\bin\windows\kafka-topics.bat --create --topic Topic1 --bootstrap-server localhost:9092
+.\bin\windows\kafka-topics.bat --create --topic Topic2 --bootstrap-server localhost:9092
+.\bin\windows\kafka-topics.bat --create --topic Topic3 --bootstrap-server localhost:9092
+```
+On LINUX 
+```bash
+.\bin\kafka-topics.sh --create --topic Topic1 --bootstrap-server localhost:9092
+.\bin\windows\kafka-topics.sh --create --topic Topic2 --bootstrap-server localhost:9092
+.\bin\windows\kafka-topics.sh --create --topic Topic3 --bootstrap-server localhost:9092
+```
+
+## CREATE DATABASE (ON POSTGRESQL)
+
+```SQL
+-- SCHEMA: covid19
+
+-- DROP SCHEMA IF EXISTS covid19 ;
+
+CREATE SCHEMA IF NOT EXISTS covid19
+    AUTHORIZATION "Covid19";
+```
+
+```SQL
 -- Table: covid19.global
 
 -- DROP TABLE IF EXISTS covid19.global;
 
-```SQL
 CREATE TABLE IF NOT EXISTS covid19.global
 (
     covid19_id integer NOT NULL DEFAULT nextval('covid19.global_covid19_id_seq'::regclass),
@@ -29,3 +58,5 @@ CREATE TABLE IF NOT EXISTS covid19.global
 ```
 
 ## USE
+
+
