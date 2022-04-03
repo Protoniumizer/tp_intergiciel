@@ -69,3 +69,16 @@ Launch the different class
 - Cs3 and Pr2 to process order.
 - Pr2 and Cs3 to make requests with the console.
 
+To make queries, you must use the console with these different commands.
+- Get_global_values
+    - returns global values of covid.
+- Get_country_values v_pays 
+    - returns country values for country "v_pays", where v_pays is the country code of the requested country (e.g. : France = FR)
+- Get_confirmed_avg
+    - returns an average of confirmed covid cases
+- Get_deaths_avg
+    - returns an average of covid deaths
+- Get_countries_deaths_percent
+    - returns the percentage of Deaths compared to confirmed cases
+- Export
+    - exports data from database in XML file
