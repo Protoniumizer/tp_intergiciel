@@ -59,4 +59,13 @@ CREATE TABLE IF NOT EXISTS covid19.global
 
 ## USE
 
+Execute previous command
+
+Open an IDE (IntelliJ was used to code)
+
+Launch the different class
+- Pr1 to call the API
+- Cs1 to insert data in database.
+- Cs3 and Pr2 to process order.
+- Pr2 and Cs3 to make requests with the console.
 
