@@ -57,6 +57,9 @@ CREATE TABLE IF NOT EXISTS covid19.global
 )
 ```
 
+## BEFORE STARTING
+Don't forget to fill in your user's credentials to connect to your database in the file IPostGresConstants.java
+
 ## USE
 
 Execute previous command
