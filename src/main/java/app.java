@@ -1,26 +1,13 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.postgresql.util.PGobject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import kafka.utils.json.JsonObject;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.postgresql.util.PGobject;
 
 public class app {
     public app() {
@@ -28,12 +15,14 @@ public class app {
 
     public static void main(String[] args) {
 
-        Producer<Long, String> producer1 = ProducerCreator.createProducer();
-        Producer<Long, String> producer2 = ProducerCreator.createProducer();
-        Producer<Long, String> producer3 = ProducerCreator.createProducer();
-        Consumer<Long, String> consumer1 = ConsumerCreator.createConsumer("Topic1");
-        Consumer<Long, String> consumer2 = ConsumerCreator.createConsumer("Topic2");
-        Consumer<Long, String> consumer3 = ConsumerCreator.createConsumer("Topic3");
+        CustomProducer p2 = new CustomProducer(ProducerCreator.createProducer(), 2);
+        CustomProducer p3 = new CustomProducer(ProducerCreator.createProducer(), 3);
+
+        CustomConsumer c1 = new CustomConsumer(ConsumerCreator.createConsumer("Topic1"), 1);
+        CustomConsumer c2 = new CustomConsumer(ConsumerCreator.createConsumer("Topic2"), 2);
+        CustomConsumer c3 = new CustomConsumer(ConsumerCreator.createConsumer("Topic3"), 3);
+
+        c1.run();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -43,44 +32,45 @@ public class app {
 
         String saisie = scanner.next();
         boolean commandRecognized = false;
-        while(true){
-        while(!commandRecognized){
-            switch (saisie){
+        //while(true){
+            while(!commandRecognized){
+                switch (saisie){
 
                 case "Get_global_values":
                     System.out.println("Get_global_values");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
+                    System.out.println(getBddValues("Get_global_values"));
                     break;
 
                 case "Get_country_values":
                     System.out.println("Get_country_values");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
                     break;
 
                 case "Get_confirmed_avg":
                     System.out.println("Get_confirmed_avg");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
                     break;
 
                 case "Get_deaths_avg":
                     System.out.println("Get_deaths_avg");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
                     break;
 
                 case "Get_countries_deaths_percent":
                     System.out.println("Get_countries_deaths_percent");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
                     break;
 
                 case "Export":
                     System.out.println("Export");
                     commandRecognized = true;
-                    producerSend(producer2, "Topic2", saisie);
+                    p2.send("Topic2", saisie);
                     break;
 
                 case "Quit":
@@ -105,16 +95,61 @@ public class app {
                     System.out.println("Saisissez une commande à exécuter (faites \"Help\" pour connaître les commandes possibles) :");
                     saisie = scanner.next();
             }
-        }}
-        /*
-        producerSend(producer1, "Topic1", getApiDatas());
-        System.out.println("----------------------------");
-        System.out.println("----------------------------");
-        System.out.println("----------------------------");
-        System.out.println("----------------------------");
-        runConsumer(consumer1);
+        }
+    //}
 
-         */
+        System.out.println("----------------------------");
+        System.out.println("----------------------------");
+        System.out.println("----------------------------");
+        System.out.println("----------------------------");
+        c1.run();
+
+    }
+
+    public static String getBddValues(String commande){
+        String SQL="";
+        String result="";
+        switch (commande) {
+
+            case "Get_global_values":
+                SQL = "select (data->'Global') from covid19.global;";
+                break;
+
+            case "Get_country_values":
+                SQL = "";
+                break;
+
+            case "Get_confirmed_avg":
+                SQL = "";
+                break;
+
+            case "Get_deaths_avg":
+                SQL = "";
+                break;
+
+            case "Get_countries_deaths_percent":
+                SQL = "";
+                break;
+
+            case "Export":
+                SQL = "";
+                break;
+        }
+
+
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(SQL,
+                     ResultSet.TYPE_SCROLL_SENSITIVE,
+                     ResultSet.CONCUR_UPDATABLE)) {
+            ResultSet rs = ps.executeQuery();
+            rs.last();
+            result = rs.getString(1);
+            rs.close();
+        }catch(Exception e ) {
+            System.out.println(e);
+        }
+
+        return result;
     }
 
     public static Connection connect() throws SQLException {
@@ -183,24 +218,13 @@ public class app {
                         System.out.println(s);
 
                     }
-                    */
+                     */
 
                 });
                 consumer.commitAsync();
             }
         } while (noMessageToFetch <= IKafkaConstants.MAX_NO_MESSAGE_FOUND_COUNT);
         consumer.close();
-    }
-
-    static void producerSend(Producer p, String topic, String toSend){
-        ProducerRecord record = new ProducerRecord(topic, toSend);
-        try {
-            RecordMetadata metadata = (RecordMetadata) p.send(record).get();
-            System.out.println("Enregistrement envoyé : " + toSend + " vers la partition " + metadata.partition() + " Et l'offset " + metadata.offset());
-        } catch (Exception e) {
-            System.out.println("Erreur dans l'envoi de l'enregistrement");
-            System.out.println(e);
-        }
     }
 
     public static String getApiDatas() {
