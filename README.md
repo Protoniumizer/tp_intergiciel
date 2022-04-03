@@ -7,15 +7,15 @@ WATIER Julie
 
 ## LAUNCH SERVER KAFKA/ZOOKEEPER
 
-On WINDOWS
+On WINDOWS (Use two terminals, one for zookeeper, one for kafka)
 ```bash
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 .\bin\windows\kafka-server-start.bat .\config\server.properties 
 ```
-On LINUX 
+On LINUX (Use two terminals, one for zookeeper, one for kafka)
 ```bash
-.\bin\zookeeper-server-start.sh .\config\zookeeper.properties
-.\bin\kafka-server-start.sh .\config\server.properties 
+./bin/zookeeper-server-start.sh ./config/zookeeper.properties
+./bin/kafka-server-start.sh ./config/server.properties 
 ```
 
 ## CREATE TOPIC
@@ -28,9 +28,9 @@ On WINDOWS
 ```
 On LINUX 
 ```bash
-.\bin\kafka-topics.sh --create --topic Topic1 --bootstrap-server localhost:9092
-.\bin\windows\kafka-topics.sh --create --topic Topic2 --bootstrap-server localhost:9092
-.\bin\windows\kafka-topics.sh --create --topic Topic3 --bootstrap-server localhost:9092
+./bin/kafka-topics.sh --create --topic Topic1 --bootstrap-server localhost:9092
+./bin/kafka-topics.sh --create --topic Topic2 --bootstrap-server localhost:9092
+./bin/kafka-topics.sh --create --topic Topic3 --bootstrap-server localhost:9092
 ```
 
 ## CREATE DATABASE (ON POSTGRESQL)
